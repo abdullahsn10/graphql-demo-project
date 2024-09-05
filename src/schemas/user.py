@@ -16,3 +16,13 @@ class UserSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserCreateSchema(BaseModel):
+    """
+    User Create Schema
+    """
+
+    email: str
+    first_name: str
+    last_name: str

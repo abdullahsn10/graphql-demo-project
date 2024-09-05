@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from src.models.user import User
 from src.graphql.types.user.types import UserType
 from src.graphql.types.blog.types import BlogType
+from src.helpers import user
 
 
 @strawberry.type
@@ -12,13 +13,13 @@ class UserQuery:
     @strawberry.field
     def users(self, info) -> List[UserType]:
         db: Session = info.context["db"]
-        users = db.query(User).all()
+        users = user._find_all_users(db=db)
         return [
             UserType(
-                id=user.id,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                email=user.email,
+                id=user_instance.id,
+                first_name=user_instance.first_name,
+                last_name=user_instance.last_name,
+                email=user_instance.email,
                 blogs=[
                     BlogType(
                         id=blog.id,
@@ -26,8 +27,8 @@ class UserQuery:
                         content=blog.content,
                         owner_id=blog.owner_id,
                     )
-                    for blog in user.blogs
+                    for blog in user_instance.blogs
                 ],
             )
-            for user in users
+            for user_instance in users
         ]
