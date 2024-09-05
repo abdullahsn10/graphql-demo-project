@@ -13,3 +13,13 @@ class BlogSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class BlogCreateSchema(BaseModel):
+    """
+    Blog Create Schema
+    """
+
+    title: str
+    content: str
+    owner_id: int
